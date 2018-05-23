@@ -21,8 +21,6 @@ Allowed extensions for images are: `.jpg`, `.jpeg` and `.png`.
 
 **Limits** With a free license of Tagbox you are limited to teaching 20 tags.
 
-**Output** At the end of the teaching process the file `failed_log.txt` will be written. This file logs all failed teaching, allowing you to check why an image has failed to be taught.
-
 [Run Tagbox in tag only mode with](https://machinebox.io/docs/tagbox/recognizing-images):
 ```
 MB_KEY="INSERT-YOUR-KEY-HERE"
