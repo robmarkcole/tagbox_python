@@ -12,7 +12,17 @@ health_api_url = "http://{}:{}/readyz".format(IP, PORT)
 
 
 def _extract_base64_contents(image_file):
+    """Extract image contents."""
     return base64.b64encode(image_file.read()).decode('ascii')
+
+
+def list_folders(directiory='.'):
+    """Returns a list of folders in a dir, defaults to current dir."""
+    folders = [dir for dir in os.listdir(directiory)
+               if os.path.isdir(os.path.join(directiory, dir))
+               and not dir.startswith(directiory)]
+    folders.sort(key=str.lower)
+    return folders
 
 
 def main():
@@ -23,11 +33,7 @@ def main():
         print(e)
     else:
         if json_response.status_code == 200:
-            folders = [dir for dir in os.listdir('.')
-                       if os.path.isdir(os.path.join('.', dir)) and not dir.startswith('.')]
-
-            # sort the folder names alphabetically
-            folders.sort(key=str.lower)
+            folders = list_folders()
             for folder_name in folders:
 
                 print("Started training for " + folder_name)
