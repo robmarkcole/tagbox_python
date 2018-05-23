@@ -33,26 +33,26 @@ def main():
         print(e)
     else:
         if json_response.status_code == 200:
-            folders = list_folders()
-            for folder_name in folders:
+            tags = list_folders()
+            for tag in tags:
 
-                print("Started training for " + folder_name)
+                print("Started training for " + tag)
 
-                for file in os.listdir(os.getcwd() + "/" + folder_name):
+                for file in os.listdir(os.getcwd() + "/" + tag):
                     if file.endswith(('.jpg', '.png', '.jpeg')):
                         json_data = {
-                            TARGET: folder_name,
+                            TARGET: tag,
                             "id": file
                         }
 
                         print(
-                            "Training with file {} with tag = {}".format(file, folder_name)
+                            "Training with file {} with tag = {}".format(file, tag)
                             )
 
                         json_response = (requests.post(
                             teach_api_url,
                             data=json_data,
-                            files={'file': open(folder_name + '/' + file, 'rb')}
+                            files={'file': open(tag + '/' + file, 'rb')}
                         ))
 
                         if json_response.status_code == 200:
@@ -61,7 +61,7 @@ def main():
                         elif json_response.status_code == 400:
                             print(json_response.text + " on the following image " + file)
 
-                print(" The training for " + folder_name + " has completed")
+                print(" The training for " + tag + " has completed")
 
         else:
             print("{} isn't ready! Please check if the docker instance is up an running!".format(CLASSIFIER))
