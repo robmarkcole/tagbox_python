@@ -25,46 +25,46 @@ def list_folders(directiory='.'):
     return folders
 
 
-def main():
+def test_classifier_health():
+    """Check that classifier is reachable"""
     try:
-        json_response = requests.get(health_api_url)
-    except requests.exceptions.RequestException as e:
-        print("{} is unreachable......... Please check if it's up and running! ".format(CLASSIFIER))
-        print(e)
-    else:
-        if json_response.status_code == 200:
-            tags = list_folders()
-            for tag in tags:
+        response = requests.get(health_api_url)
+        if response.status_code == 200:
+            print("{} health-check passed".format(CLASSIFIER))
+            return True
+        else:
+            print("{} health-check failed".format(CLASSIFIER))
+            print(response.status_code)
+            return False
+    except requests.exceptions.RequestException as exception:
+        print("{} is unreachable".format(CLASSIFIER))
+        print(exception)
 
-                print("Started training for " + tag)
 
-                for file in os.listdir(os.getcwd() + "/" + tag):
-                    if file.endswith(('.jpg', '.png', '.jpeg')):
-                        json_data = {
-                            TARGET: tag,
-                            "id": file
-                        }
+def main():
+    if test_classifier_health():
+        tags = list_folders()
+        for tag in tags:
+            for file in os.listdir(os.getcwd() + "/" + tag):
+                if file.endswith(('.jpg', '.png', '.jpeg')):
+                    print(
+                        "Training with file {} with tag = {}".format(file, tag)
+                        )
 
-                        print(
-                            "Training with file {} with tag = {}".format(file, tag)
-                            )
-
-                        json_response = (requests.post(
-                            teach_api_url,
-                            data=json_data,
-                            files={'file': open(tag + '/' + file, 'rb')}
+                    json_data = {TARGET: tag, "id": file}
+                    json_response = (requests.post(
+                        teach_api_url,
+                        data=json_data,
+                        files={'file': open(tag + '/' + file, 'rb')}
                         ))
 
-                        if json_response.status_code == 200:
-                            print("Training for " + file + " has succeeded! ")
+                    if json_response.status_code == 200:
+                        print("Training for " + file + " has succeeded! ")
 
-                        elif json_response.status_code == 400:
-                            print(json_response.text + " on the following image " + file)
+                    elif json_response.status_code == 400:
+                        print(json_response.text + " on image " + file)
 
                 print(" The training for " + tag + " has completed")
-
-        else:
-            print("{} isn't ready! Please check if the docker instance is up an running!".format(CLASSIFIER))
 
 
 if __name__ == '__main__':
