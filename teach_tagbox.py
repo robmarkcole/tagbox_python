@@ -17,10 +17,12 @@ def _extract_base64_contents(image_file):
 
 
 def list_folders(directiory='.'):
-    """Returns a list of folders in a dir, defaults to current dir."""
+    """Returns a list of folders in a dir, defaults to current dir.
+    These are not full paths, just the folder."""
     folders = [dir for dir in os.listdir(directiory)
                if os.path.isdir(os.path.join(directiory, dir))
-               and not dir.startswith(directiory)]
+               and not dir.startswith(directiory)
+               and not dir.startswith('.')]
     folders.sort(key=str.lower)
     return folders
 
