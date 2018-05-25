@@ -1,19 +1,12 @@
-import base64
 import os
 import requests
 
 IP = 'localhost'
 PORT = '8080'
 CLASSIFIER = 'tagbox'
-TARGET = 'tag'
 
 teach_api_url = "http://{}:{}/{}/teach".format(IP, PORT, CLASSIFIER)
 health_api_url = "http://{}:{}/readyz".format(IP, PORT)
-
-
-def _extract_base64_contents(image_file):
-    """Extract image contents."""
-    return base64.b64encode(image_file.read()).decode('ascii')
 
 
 def list_folders(directiory='.'):
@@ -45,28 +38,22 @@ def test_classifier_health():
 
 def main():
     if test_classifier_health():
-        tags = list_folders()
-        for tag in tags:
+        for folder in list_folders():
+            tag = folder
             for file in os.listdir(os.getcwd() + "/" + tag):
                 if file.endswith(('.jpg', '.png', '.jpeg')):
-                    print(
-                        "Training with file {} with tag = {}".format(file, tag)
-                        )
-
-                    json_data = {TARGET: tag, "id": file}
-                    json_response = (requests.post(
+                    response = (requests.post(
                         teach_api_url,
-                        data=json_data,
+                        data={'tag': tag, "id": file},
                         files={'file': open(tag + '/' + file, 'rb')}
                         ))
 
-                    if json_response.status_code == 200:
-                        print("Training for " + file + " has succeeded! ")
+                    if response.status_code == 200:
+                        print("File: {} tagged with tag: {}".format(file, tag))
 
-                    elif json_response.status_code == 400:
-                        print(json_response.text + " on image " + file)
-
-                print(" The training for " + tag + " has completed")
+                    elif response.status_code == 400:
+                        print("Tagging of file: {} failed with message: image ".format(
+                            file, response.text))
 
 
 if __name__ == '__main__':
