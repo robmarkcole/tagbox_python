@@ -1,3 +1,8 @@
+"""
+Script to teach tagbox tags. The tag taught is the name of the folder which
+an image is in. The script must be run from the root directory containing the
+folders of images.
+"""
 import os
 import requests
 

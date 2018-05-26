@@ -27,3 +27,6 @@ MB_KEY="INSERT-YOUR-KEY-HERE"
 sudo docker run -p 8080:8080 -e "MB_KEY=$MB_KEY" -e MB_TAGBOX_ONLY_CUSTOM_TAGS=true machinebox/tagbox
 ```
 You should see a message on startup `pretrained tags are disabled, only custom tags will be returned`
+
+# Image Selection
+Experiment with the images you use to teach tagbox. You want as many images as possible covering a broad range of views, magnifications, backgrounds etc. I noticed that when I taught a small number of images, that in some cases it was the background (a wooden floor) which was being identified by likely tags, not the subject!
