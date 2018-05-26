@@ -28,5 +28,6 @@ sudo docker run -p 8080:8080 -e "MB_KEY=$MB_KEY" -e MB_TAGBOX_ONLY_CUSTOM_TAGS=t
 ```
 You should see a message on startup `pretrained tags are disabled, only custom tags will be returned`
 
-# Image Selection
-Experiment with the images you use to teach tagbox. You want as many images as possible covering a broad range of views, magnifications, backgrounds etc. I noticed that when I taught a small number of images, that in some cases it was the background (a wooden floor) which was being identified by likely tags, not the subject!
+# Limitations and Image Selection
+On the free plan, you can only train/tag 20 images, therefore you will probably want to limit use to binary classification, with 10 images for ON and 10 for OFF.
+Experiment with the images you use to teach tagbox, as you want to cover a range of views, magnifications, backgrounds etc. I noticed that when I taught a small number of images, that in some cases it was the background (a wooden floor) which was being identified by likely tags, not the subject!

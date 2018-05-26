@@ -55,7 +55,7 @@ def teach_tag_by_file(teach_url, tag, file_path):
         return True
 
     elif response.status_code == 400:
-        print("Tagging of file:{} failed with message:".format(
+        print("Tagging of file:{} failed with message:{}".format(
             file_name, response.text))
         return False
 
